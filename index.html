@@ -1086,13 +1086,52 @@ function showCard() {
   // Elaboration — reset
   document.getElementById('elab-prompt').classList.remove('show');
   document.getElementById('elab-btn').style.display = currentCard.tp === 'link' ? 'none' : 'block';
-  // Generate elaboration question based on card type
-  const elabQuestions = {
-    skeleton: ['Почему именно такой порядок пунктов?', 'Какой пункт самый важный для экзаменатора?', 'Объясни этот план своими словами за 30 секунд.'],
-    atom: ['Почему это важно в контексте философии?', 'Как бы ты объяснила это подруге?', 'Что бы изменилось, если бы этот факт был неверным?', 'С чем из жизни это можно сравнить?']
-  };
-  const qs = elabQuestions[currentCard.tp] || elabQuestions.atom;
-  document.getElementById('elab-prompt').textContent = qs[Math.floor(Math.random() * qs.length)];
+
+  // Context-aware elaboration (Dunlosky et al. 2013: elaboration works
+  // when the question forces connecting THIS fact to prior knowledge)
+  const topic = currentCard.tt;
+  const q = currentCard.q;
+  const a = currentCard.a;
+
+  // Extract key terms from answer for dynamic questions
+  const boldTerms = (a.match(/\*\*([^*]+)\*\*/g) || []).map(s => s.replace(/\*\*/g, ''));
+  const firstBold = boldTerms[0] || '';
+  const secondBold = boldTerms[1] || '';
+
+  // Skeleton-specific templates (plan cards)
+  const skelabTemplates = [
+    'Если бы экзаменатор перебил на третьем пункте — что точно надо было успеть сказать?',
+    'Объясни план «' + topic + '» за 20 секунд, будто подруга спросила перед экзаменом.',
+    'Какой пункт в «' + topic + '» тебе сложнее всего — почему?',
+    'Закрой ответ и перескажи план по памяти. Что забылось?',
+    'Какой пункт из этого плана связан с другим билетом? Каким?',
+    'Представь, что ты начинаешь ответ не с первого пункта, а с последнего. Что изменится?',
+    'Если бы надо было убрать один пункт — какой и почему?',
+  ];
+
+  // Atom-specific templates — use card content dynamically
+  const atomTemplates = [
+    'Как бы ты объяснила «' + topic + '» человеку, который ничего не знает о философии?',
+    'С каким другим философом или идеей из другого билета это связано?',
+    firstBold ? 'Почему ' + firstBold + ' — это ключевое понятие здесь, а не что-то другое?' : 'Что здесь главное понятие и почему именно оно?',
+    'Если бы тебе задали этот вопрос устно — какое первое предложение ты скажешь?',
+    secondBold ? 'В чём разница между ' + firstBold + ' и ' + secondBold + '? Почему это важно?' : 'Придумай свою аналогию для этого понятия.',
+    'Что бы сказал автор этой идеи про современный мир?',
+    'С чем из твоей жизни это можно сравнить — конкретный пример?',
+    'Закрой ответ. Перескажи своими словами. Потом сравни — что упустила?',
+    'Почему экзаменатор может спросить именно это? Что он хочет услышать?',
+    'Какой контраргумент можно привести против этой идеи?',
+    firstBold ? 'Если убрать ' + firstBold + ' из ответа — он развалится? Почему?' : 'Что будет, если убрать главную мысль из ответа?',
+    'Как эта идея из «' + topic + '» повлияла на то, что было после?',
+  ];
+
+  const pool = currentCard.tp === 'skeleton' ? skelabTemplates : atomTemplates;
+  // Pick 1 random, but avoid showing same question twice in a row
+  let idx = Math.floor(Math.random() * pool.length);
+  const lastElab = window._lastElabIdx || -1;
+  if (idx === lastElab && pool.length > 1) idx = (idx + 1) % pool.length;
+  window._lastElabIdx = idx;
+  document.getElementById('elab-prompt').textContent = pool[idx];
 }
 
 function showElab(e) {
