@@ -94,6 +94,7 @@ body {
 .stat { background:var(--bg-card); border-radius:var(--radius-sm); box-shadow:var(--shadow); border:0.5px solid var(--sep); padding:16px; text-align:center; }
 .stat .val { font-family:var(--font-serif); font-size:30px; font-weight:600; color:var(--text); }
 .stat .lbl { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:1.2px; color:var(--text-ter); margin-top:4px; }
+.stat-hint { font-size:10px; color:var(--text-ter); margin-top:4px; line-height:1.3; font-weight:400; }
 .ticket-list { margin-top:20px; background:var(--bg-card); border-radius:var(--radius); box-shadow:var(--shadow); border:0.5px solid var(--sep); overflow:hidden; }
 .ticket-list h3 { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-ter); padding:16px 16px 8px; }
 .t-row {
@@ -258,10 +259,10 @@ body {
   </div>
   <div class="progress-wrap"><div class="progress-bar" id="dash-progress"></div></div>
   <div class="stats">
-    <div class="stat"><div class="val" id="st-total">32</div><div class="lbl">Билетов</div></div>
-    <div class="stat"><div class="val" id="st-done">0</div><div class="lbl">Выучено</div></div>
-    <div class="stat"><div class="val" id="st-due">0</div><div class="lbl">К повтору</div></div>
-    <div class="stat"><div class="val" id="st-streak">0</div><div class="lbl">Серия</div></div>
+    <div class="stat"><div class="val" id="st-total">32</div><div class="lbl">Билетов</div><div class="stat-hint">всего в экзамене</div></div>
+    <div class="stat"><div class="val" id="st-done">0</div><div class="lbl">Выучено</div><div class="stat-hint">все карточки билета на максимуме</div></div>
+    <div class="stat"><div class="val" id="st-due">0</div><div class="lbl">К повтору</div><div class="stat-hint">карточки, которые пора повторить</div></div>
+    <div class="stat"><div class="val" id="st-streak">0</div><div class="lbl">Серия</div><div class="stat-hint">подряд верных ответов «Знаю!»</div></div>
   </div>
   <button class="btn btn-accent" id="start-btn" onclick="startStudy()">Учить</button>
   <div class="next-timer" id="dash-timer" style="display:none"></div>
@@ -590,10 +591,12 @@ function updateGlobalProgress() {
   const gp = document.getElementById('global-progress');
   if (!state.o) { gp.style.display = 'none'; return; }
   gp.style.display = 'block';
-  const done = countDoneTickets();
-  const pct = getMasteryPercent();
-  document.getElementById('gp-label').textContent = done + ' / 32 билетов';
-  document.getElementById('gp-bar').style.width = pct + '%';
+  const mastered = CARDS.filter(c => getLevel(c.id) >= 7).length;
+  const inProgress = CARDS.filter(c => { const l = getLevel(c.id); return l > 0 && l < 7; }).length;
+  const pct = Math.round((mastered / CARDS.length) * 100);
+  const label = mastered > 0 ? mastered + ' из ' + CARDS.length + ' выучено' : inProgress + ' из ' + CARDS.length + ' в процессе';
+  document.getElementById('gp-label').textContent = label;
+  document.getElementById('gp-bar').style.width = Math.round(((mastered + inProgress * 0.3) / CARDS.length) * 100) + '%';
   document.getElementById('gp-pct').textContent = pct + '%';
 }
 
