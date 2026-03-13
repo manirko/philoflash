@@ -223,6 +223,8 @@ body {
   padding:8px 16px max(8px, env(safe-area-inset-bottom));
   z-index:100;
   display:none;
+  cursor:pointer;
+  -webkit-user-select:none; user-select:none;
 }
 .global-progress-inner {
   max-width:430px; margin:0 auto;
@@ -237,6 +239,22 @@ body {
 .global-progress-label {
   font-size:12px; font-weight:600; color:var(--text-sec); white-space:nowrap;
 }
+.gp-explain {
+  max-width:430px; margin:0 auto;
+  max-height:0; overflow:hidden; transition:max-height 0.35s ease, opacity 0.3s ease, margin-top 0.35s ease;
+  opacity:0; margin-top:0;
+}
+.gp-explain.open {
+  max-height:220px; opacity:1; margin-top:10px;
+}
+.gp-explain-text {
+  font-size:13px; line-height:1.55; color:var(--text-sec);
+  background:var(--bg); border-radius:var(--radius-sm); padding:14px 16px;
+  border:0.5px solid var(--sep);
+}
+.gp-explain-text p { margin-bottom:6px; }
+.gp-explain-text p:last-child { margin-bottom:0; }
+.gp-explain-text strong { color:var(--text); font-weight:600; }
 </style>
 </head>
 <body>
@@ -314,13 +332,20 @@ body {
 </div>
 
 <!-- GLOBAL PROGRESS -->
-<div class="global-progress" id="global-progress">
+<div class="global-progress" id="global-progress" onclick="toggleGpExplain()">
   <div class="global-progress-inner">
     <span class="global-progress-label" id="gp-label">0 / 32</span>
     <div class="global-progress-bar-wrap">
       <div class="global-progress-bar-fill" id="gp-bar"></div>
     </div>
     <span class="global-progress-label" id="gp-pct">0%</span>
+  </div>
+  <div class="gp-explain" id="gp-explain">
+    <div class="gp-explain-text">
+      <p><strong>Полоса</strong> — общий прогресс по всем 157 карточкам. Растёт с каждым правильным ответом.</p>
+      <p><strong>Число слева</strong> — сколько из 32 билетов полностью выучено. Билет считается готовым, когда все его карточки прошли все 7 интервалов повторения.</p>
+      <p><strong>Процент справа</strong> — доля полностью выученных билетов от общего числа.</p>
+    </div>
   </div>
 </div>
 
@@ -596,6 +621,10 @@ function updateGlobalProgress() {
   document.getElementById('gp-label').textContent = done + ' / 32 готово к экзамену';
   document.getElementById('gp-bar').style.width = getMasteryPercent() + '%';
   document.getElementById('gp-pct').textContent = pct + '%';
+}
+
+function toggleGpExplain() {
+  document.getElementById('gp-explain').classList.toggle('open');
 }
 
 function formatBold(text) {
