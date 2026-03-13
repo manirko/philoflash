@@ -6,25 +6,29 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Принцесософия">
-<meta name="theme-color" content="#F2F2F7">
+<meta name="theme-color" content="#FAF7F2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <title>Принцесософия</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
 :root {
-  --bg: #F2F2F7;
-  --bg-card: #FFFFFF;
-  --text: #000000;
-  --text-sec: rgba(60,60,67,0.6);
-  --text-ter: rgba(60,60,67,0.3);
-  --sep: rgba(60,60,67,0.12);
-  --accent: #007AFF;
-  --green: #34C759;
-  --red: #FF3B30;
-  --orange: #FF9500;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
-  --shadow-lg: 0 4px 14px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+  --bg: #FAF7F2;
+  --bg-card: #FFFDF9;
+  --text: #2C2420;
+  --text-sec: rgba(44,36,32,0.55);
+  --text-ter: rgba(44,36,32,0.25);
+  --sep: rgba(44,36,32,0.10);
+  --accent: #B8976A;
+  --green: #8FA688;
+  --red: #C4888B;
+  --orange: #D4A76A;
+  --shadow: 0 1px 4px rgba(44,36,32,0.06);
+  --shadow-lg: 0 4px 16px rgba(44,36,32,0.07);
   --radius: 16px;
   --radius-sm: 12px;
+  --font-serif: 'Cormorant Garamond', 'Georgia', serif;
 }
 html { background: var(--bg); }
 body {
@@ -45,22 +49,22 @@ body {
 
 /* === ONBOARDING === */
 .onb-slide { text-align:center; padding:40px 24px; }
-.onb-slide h1 { font-size:34px; font-weight:700; margin-bottom:8px; }
-.onb-slide h2 { font-size:22px; font-weight:600; margin-bottom:16px; }
+.onb-slide h1 { font-family:var(--font-serif); font-size:38px; font-weight:600; margin-bottom:8px; letter-spacing:-0.5px; }
+.onb-slide h2 { font-family:var(--font-serif); font-size:24px; font-weight:500; margin-bottom:16px; }
 .onb-slide p { font-size:17px; line-height:1.6; color:var(--text-sec); margin-bottom:12px; }
 .onb-slide .highlight { color:var(--text); font-weight:500; }
-.onb-emoji { font-size:64px; margin-bottom:20px; display:block; }
+.onb-emoji { font-size:48px; margin-bottom:16px; display:block; }
 .onb-intervals {
   display:flex; gap:4px; justify-content:center; align-items:center; flex-wrap:wrap;
-  margin:20px 0; padding:16px; background:var(--bg-card); border-radius:var(--radius-sm); box-shadow:var(--shadow);
+  margin:20px 0; padding:16px; background:var(--bg-card); border-radius:var(--radius-sm); box-shadow:var(--shadow); border:0.5px solid var(--sep);
 }
-.onb-intervals span { font-size:13px; font-weight:600; color:var(--accent); padding:6px 10px; background:rgba(0,122,255,0.08); border-radius:8px; }
+.onb-intervals span { font-size:13px; font-weight:600; color:var(--accent); padding:6px 10px; background:rgba(184,151,106,0.12); border-radius:8px; }
 .onb-intervals .arrow { color:var(--text-ter); font-size:11px; background:none; padding:0 2px; }
-.onb-sessions { text-align:left; background:var(--bg-card); border-radius:var(--radius-sm); box-shadow:var(--shadow); padding:16px 20px; margin:16px 0; }
+.onb-sessions { text-align:left; background:var(--bg-card); border-radius:var(--radius-sm); box-shadow:var(--shadow); border:0.5px solid var(--sep); padding:16px 20px; margin:16px 0; }
 .onb-sessions div { padding:10px 0; border-bottom:0.5px solid var(--sep); font-size:15px; line-height:1.5; }
 .onb-sessions div:last-child { border:none; }
-.onb-sessions strong { color:var(--accent); }
-.onb-science { background:var(--bg-card); border-radius:var(--radius-sm); box-shadow:var(--shadow); padding:16px 20px; margin:16px 0; text-align:left; }
+.onb-sessions strong { color:var(--text); font-weight:600; }
+.onb-science { background:var(--bg-card); border-radius:var(--radius-sm); box-shadow:var(--shadow); border:0.5px solid var(--sep); padding:16px 20px; margin:16px 0; text-align:left; }
 .onb-science .sci-item { padding:8px 0; font-size:15px; line-height:1.5; color:var(--text-sec); }
 .onb-science .sci-item strong { color:var(--text); }
 .onb-science .sci-emoji { font-size:20px; margin-right:8px; }
@@ -76,22 +80,22 @@ body {
   transition: opacity 0.15s, transform 0.1s;
 }
 .btn:active { opacity:0.8; transform:scale(0.98); }
-.btn-accent { background:var(--accent); color:#fff; }
+.btn-accent { background:var(--accent); color:#fff; letter-spacing:0.3px; }
 .btn-secondary { background:var(--bg-card); color:var(--accent); box-shadow:var(--shadow); }
 .btn-sm { min-height:48px; border-radius:var(--radius-sm); font-size:15px; }
 
 /* === DASHBOARD === */
 .dash-header { padding:8px 0 16px; }
-.dash-header h1 { font-size:34px; font-weight:700; }
+.dash-header h1 { font-family:var(--font-serif); font-size:36px; font-weight:600; letter-spacing:-0.5px; }
 .dash-header p { font-size:15px; color:var(--text-sec); margin-top:2px; }
 .progress-wrap { height:4px; background:var(--sep); border-radius:2px; margin:16px 0; overflow:hidden; }
 .progress-bar { height:100%; background:linear-gradient(90deg, var(--accent), var(--green)); border-radius:2px; transition:width 0.5s ease; }
 .stats { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
-.stat { background:var(--bg-card); border-radius:var(--radius-sm); box-shadow:var(--shadow); padding:16px; text-align:center; }
-.stat .val { font-size:28px; font-weight:700; color:var(--text); }
-.stat .lbl { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-sec); margin-top:4px; }
-.ticket-list { margin-top:20px; background:var(--bg-card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
-.ticket-list h3 { font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-sec); padding:16px 16px 8px; }
+.stat { background:var(--bg-card); border-radius:var(--radius-sm); box-shadow:var(--shadow); border:0.5px solid var(--sep); padding:16px; text-align:center; }
+.stat .val { font-family:var(--font-serif); font-size:30px; font-weight:600; color:var(--text); }
+.stat .lbl { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:1.2px; color:var(--text-ter); margin-top:4px; }
+.ticket-list { margin-top:20px; background:var(--bg-card); border-radius:var(--radius); box-shadow:var(--shadow); border:0.5px solid var(--sep); overflow:hidden; }
+.ticket-list h3 { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-ter); padding:16px 16px 8px; }
 .t-row {
   display:flex; align-items:center; padding:14px 16px; gap:12px;
   border-bottom:0.5px solid var(--sep); cursor:pointer;
@@ -104,7 +108,7 @@ body {
   background:var(--bg); display:flex; align-items:center; justify-content:center;
   font-size:13px; font-weight:700; flex-shrink:0;
 }
-.t-num.done { background:var(--accent); color:#fff; }
+.t-num.done { background:var(--green); color:#fff; }
 .t-name { flex:1; font-size:15px; font-weight:400; }
 .t-dots { display:flex; gap:3px; flex-shrink:0; }
 .t-dot { width:6px; height:6px; border-radius:50%; background:var(--sep); }
@@ -119,17 +123,17 @@ body {
 }
 .back-btn {
   width:36px; height:36px; border-radius:50%; background:var(--bg-card);
-  box-shadow:var(--shadow); border:none; cursor:pointer;
+  box-shadow:var(--shadow); border:0.5px solid var(--sep); cursor:pointer;
   display:flex; align-items:center; justify-content:center;
   font-size:18px; color:var(--text-sec);
 }
 .back-btn:active { opacity:0.7; }
 .study-title { flex:1; }
-.study-title h2 { font-size:17px; font-weight:600; }
+.study-title h2 { font-family:var(--font-serif); font-size:19px; font-weight:600; }
 .study-title p { font-size:12px; color:var(--text-sec); }
 .study-counter {
   font-size:13px; font-weight:600; color:var(--accent);
-  background:rgba(0,122,255,0.08); padding:6px 12px; border-radius:20px;
+  background:rgba(184,151,106,0.12); padding:6px 12px; border-radius:20px;
 }
 .study-progress { height:3px; background:var(--sep); border-radius:2px; margin-bottom:16px; }
 .study-progress-bar { height:100%; background:var(--accent); border-radius:2px; transition:width 0.3s; }
@@ -156,6 +160,7 @@ body {
   background:var(--bg-card);
   border-radius:var(--radius);
   box-shadow:var(--shadow-lg);
+  border:0.5px solid var(--sep);
   display:flex; flex-direction:column;
   overflow:hidden;
 }
@@ -163,19 +168,24 @@ body {
   align-items:center; justify-content:center; padding:32px 24px; cursor:pointer;
 }
 .card-back {
-  transform:rotateY(180deg); padding:24px;
+  transform:rotateY(180deg); padding:20px 24px 24px;
   overflow-y:auto; -webkit-overflow-scrolling:touch;
 }
 .card-type {
-  position:absolute; top:16px; left:16px;
-  font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;
-  padding:4px 10px; border-radius:6px;
+  font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:1.2px;
+  padding:4px 10px; border-radius:4px; display:inline-block; margin-bottom:12px;
 }
-.card-type.skeleton { background:rgba(0,122,255,0.08); color:var(--accent); }
-.card-type.atom { background:rgba(52,199,89,0.08); color:var(--green); }
-.card-type.link { background:rgba(255,149,0,0.08); color:var(--orange); }
+.card-front .card-type {
+  position:absolute; top:16px; left:16px; margin-bottom:0;
+}
+.card-back .card-type {
+  position:relative;
+}
+.card-type.skeleton { background:rgba(184,151,106,0.12); color:var(--accent); }
+.card-type.atom { background:rgba(143,166,136,0.15); color:var(--green); }
+.card-type.link { background:rgba(212,167,106,0.15); color:var(--orange); }
 .card-q {
-  font-size:22px; font-weight:600; line-height:1.4;
+  font-family:var(--font-serif); font-size:24px; font-weight:600; line-height:1.4;
   text-align:center; color:var(--text);
 }
 .card-hint {
@@ -199,8 +209,8 @@ body {
 
 /* === BREAK === */
 .break-wrap { text-align:center; padding:60px 24px; }
-.break-emoji { font-size:72px; margin-bottom:24px; display:block; }
-.break-wrap h2 { font-size:28px; font-weight:700; margin-bottom:8px; }
+.break-emoji { font-size:56px; margin-bottom:20px; display:block; }
+.break-wrap h2 { font-family:var(--font-serif); font-size:30px; font-weight:600; margin-bottom:8px; }
 .break-timer { font-size:48px; font-weight:300; color:var(--accent); letter-spacing:-1px; margin:24px 0; }
 .break-wrap p { font-size:17px; color:var(--text-sec); line-height:1.5; margin-bottom:32px; }
 
@@ -232,48 +242,9 @@ body {
 
 <!-- ONBOARDING -->
 <div class="screen" id="onboarding">
-  <div class="onb-slide" id="onb-1">
-    <span class="onb-emoji">👑</span>
-    <h1>Принцесософия</h1>
-    <h2>Философия? Легко. За 3 дня.</h2>
-    <p>157 карточек по 32 билетам. Каждая — один факт, коротко и понятно. Никаких учебников размером с «Критику чистого разума».</p>
-    <p>Ты не зубришь — ты <span class="highlight">понимаешь и запоминаешь навсегда</span>. Ну, минимум до понедельника. А это всё, что нужно.</p>
-    <p style="font-size:14px; margin-top:8px; color:var(--text-ter)">Платон бы одобрил. Аристотель бы систематизировал. Сократ бы задал ещё 47 вопросов.</p>
-  </div>
-  <div class="onb-slide" id="onb-2" style="display:none">
-    <span class="onb-emoji">🧠</span>
-    <h2>Почему это работает?</h2>
-    <p>Мозг устроен хитро: он забывает по кривой Эббингауза — быстро в начале, потом всё медленнее. Но если повторить <span class="highlight">именно перед тем, как забыл</span> — память укрепляется в разы.</p>
-    <div class="onb-science">
-      <div class="sci-item"><span class="sci-emoji">📊</span><strong>Наука:</strong> интервальное повторение повышает запоминание на 200% по сравнению с зубрёжкой (Cepeda et al., 2006)</div>
-      <div class="sci-item"><span class="sci-emoji">😴</span><strong>Сон:</strong> между сессиями мозг сам переносит информацию в долгосрочную память. Буквально учишься во сне. Легально.</div>
-      <div class="sci-item"><span class="sci-emoji">🔄</span><strong>Интервалы растут:</strong> 5 мин → 30 мин → 2 ч → 8 ч → 1 день → 2 дня. Каждый раз память крепче.</div>
-    </div>
-    <p style="font-size:14px; color:var(--text-ter)">Это не магия. Это нейронаука. Хотя Платон сказал бы «магия».</p>
-  </div>
-  <div class="onb-slide" id="onb-3" style="display:none">
-    <span class="onb-emoji">📅</span>
-    <h2>План: пятница → понедельник</h2>
-    <p style="margin-bottom:8px">3 дня. 6 сессий. 32 билета. Вот расклад:</p>
-    <div class="onb-sessions">
-      <div><strong>🌙 Пт вечер:</strong> Знакомство — первый проход карточек. Мозг скажет «ого, сколько», но это нормально</div>
-      <div><strong>☀️ Сб утро:</strong> Повторение вчерашнего + новые. Удивишься, сколько уже помнишь</div>
-      <div><strong>🌅 Сб вечер:</strong> Закрепление. Самые трудные возвращаются — это по плану</div>
-      <div><strong>☀️ Вс утро:</strong> Глубокое повторение. К этому моменту 60–70% уже в голове</div>
-      <div><strong>🌅 Вс вечер:</strong> Финальная шлифовка. Сложное станет простым</div>
-      <div><strong>🌟 Пн утро:</strong> Быстрый прогон перед экзаменом. Всё на месте!</div>
-    </div>
-    <p style="font-size:14px; color:var(--text-ter)">Между сессиями — жить нормально. Мозг работает в фоне, как хороший Wi-Fi.</p>
-  </div>
-  <div class="onb-slide" id="onb-4" style="display:none">
-    <span class="onb-emoji">💪</span>
-    <h2>Ты справишься. Вот почему:</h2>
-    <p>Каждая карточка — <span class="highlight">один конкретный факт</span>. Не 10 страниц, а 3 предложения. Плюс шутка, чтобы запомнилось.</p>
-    <p>Приложение <span class="highlight">само решает</span>, когда показать карточку. Тебе нужно только: читать, переворачивать, оценивать.</p>
-    <p>Три кнопки: <span style="color:var(--red);font-weight:600">Не помню</span> · <span style="color:var(--orange);font-weight:600">Ещё раз</span> · <span style="color:var(--green);font-weight:600">Знаю!</span></p>
-    <p style="font-size:14px; color:var(--text-ter); margin-top:12px">Гегель бы сказал: «тезис — не знаешь, антитезис — учишь, синтез — сдаёшь на отлично». Ну что, поехали?</p>
-  </div>
-  <div class="onb-dots"><span class="active"></span><span></span><span></span><span></span></div>
+  <div class="onb-slide" id="onb-1"></div>
+  <div class="onb-slide" id="onb-2" style="display:none"></div>
+  <div class="onb-dots"><span class="active"></span><span></span></div>
   <div style="padding:0 24px; margin-top:16px;">
     <button class="btn btn-accent" id="onb-next">Дальше</button>
   </div>
@@ -652,20 +623,79 @@ function showScreen(id) {
 }
 
 // ===== ONBOARDING =====
+const ONB_SLIDE1 = [
+  {
+    h: 'Принцесософия',
+    sub: 'Философия? Легко. За 3 дня.',
+    body: '<p>157 карточек по 32 билетам. Каждая — один факт, коротко и понятно. Никаких учебников размером с «Критику чистого разума».</p><p>Ты не зубришь — ты <span class="highlight">понимаешь и запоминаешь навсегда</span>. Ну, минимум до понедельника.</p><p style="font-size:14px;margin-top:8px;color:var(--text-ter)">Платон бы одобрил. Аристотель бы систематизировал. Сократ бы задал ещё 47 вопросов.</p>'
+  },
+  {
+    h: 'Принцесософия',
+    sub: 'Мозг запоминает не от усилия, а от ритма.',
+    body: '<p>Кривая Эббингауза доказала: мы забываем 70% за сутки. Но если повторить <span class="highlight">в нужный момент</span> — память укрепляется экспоненциально.</p><p>Интервальное повторение повышает запоминание на 200% (Cepeda et al., 2006). Это приложение делает расчёт за тебя.</p><p style="font-size:14px;margin-top:8px;color:var(--text-ter)">Нейронаука, а не магия. Хотя Платон сказал бы «магия».</p>'
+  },
+  {
+    h: 'Принцесософия',
+    sub: 'Учишь 20 минут — помнишь 2 дня.',
+    body: '<p>Между сессиями мозг сам переносит информацию в долгосрочную память. <span class="highlight">Сон — твой главный союзник</span>.</p><p>Каждая карточка — 3 предложения + шутка, чтобы запомнилось. Никаких стен текста.</p><p style="font-size:14px;margin-top:8px;color:var(--text-ter)">Гегель бы сказал: «тезис — не знаешь, антитезис — учишь, синтез — сдаёшь на отлично».</p>'
+  },
+  {
+    h: 'Принцесософия',
+    sub: '32 билета. 6 сессий. Ты готова.',
+    body: '<p>Пятница → понедельник. Каждая сессия — <span class="highlight">15–25 минут</span>. Между ними — живёшь нормально, мозг работает в фоне.</p><p>Приложение само подбирает, что повторить и когда. Тебе нужно только: читать, переворачивать, оценивать.</p><p style="font-size:14px;margin-top:8px;color:var(--text-ter)">Аристотель говорил: «мы — то, что делаем регулярно». Осталось 6 раз.</p>'
+  },
+  {
+    h: 'Принцесософия',
+    sub: 'Не зубрёжка. Стратегия.',
+    body: '<p>Зубрёжка — это перечитывать одно и то же. Интервальное повторение — <span class="highlight">повторять именно то, что начинаешь забывать</span>.</p><p>Результат: меньше времени, больше в голове. 157 карточек звучит много, но мозг справится — ему нравятся короткие факты.</p><p style="font-size:14px;margin-top:8px;color:var(--text-ter)">Как говорил Сократ: «я знаю, что ничего не знаю» — но к понедельнику это изменится.</p>'
+  },
+  {
+    h: 'Принцесософия',
+    sub: 'Каждое повторение — сильнее предыдущего.',
+    body: '<p>Интервалы растут: 5 мин → 30 мин → 2 ч → 8 ч → 1 день → 2 дня. <span class="highlight">Каждый раз нейронная связь крепче</span>.</p><p>К третьей сессии ты уже знаешь 60–70%. К шестой — всё на месте.</p><p style="font-size:14px;margin-top:8px;color:var(--text-ter)">Эпикур бы одобрил: минимум усилий — максимум результата.</p>'
+  }
+];
+
+const ONB_SLIDE2 = [
+  {
+    sub: 'Как это устроено',
+    body: '<p>Переворачиваешь карточку — видишь ответ. Оцениваешь себя тремя кнопками:</p><p><span style="color:var(--red);font-weight:600">Не помню</span> — карточка вернётся сразу</p><p><span style="color:var(--orange);font-weight:600">Ещё раз</span> — повторится через интервал</p><p><span style="color:var(--green);font-weight:600">Знаю!</span> — интервал увеличивается</p><p style="margin-top:12px">Будь честна с собой — это работает только так.</p>'
+  },
+  {
+    sub: 'Три кнопки — одно правило',
+    body: '<p>После каждого ответа выбираешь:</p><p><span style="color:var(--red);font-weight:600">Не помню</span> — начинаем сначала, это нормально</p><p><span style="color:var(--orange);font-weight:600">Ещё раз</span> — знаю, но неуверенно</p><p><span style="color:var(--green);font-weight:600">Знаю!</span> — следующий повтор будет позже</p><p style="margin-top:12px">Приложение само решит, когда вернуть карточку. Доверяй алгоритму.</p>'
+  },
+  {
+    sub: 'Простые правила',
+    body: '<p>Читаешь вопрос → переворачиваешь → проверяешь себя → оцениваешь.</p><p><span style="color:var(--red);font-weight:600">Не помню</span> · <span style="color:var(--orange);font-weight:600">Ещё раз</span> · <span style="color:var(--green);font-weight:600">Знаю!</span></p><p style="margin-top:8px">Главное — <span class="highlight">честность</span>. «Знаю» только когда реально знаешь. Приложение подстроится под твой темп.</p>'
+  }
+];
+
 let onbSlide = 1;
+let onbData1, onbData2;
+
 function initOnboarding() {
-  if (state.o) { showDashboard(); return; }
+  onbSlide = 1;
+  onbData1 = ONB_SLIDE1[Math.floor(Math.random() * ONB_SLIDE1.length)];
+  onbData2 = ONB_SLIDE2[Math.floor(Math.random() * ONB_SLIDE2.length)];
+
+  document.getElementById('onb-1').innerHTML = '<span class="onb-emoji">✦</span><h1>' + onbData1.h + '</h1><h2>' + onbData1.sub + '</h2>' + onbData1.body;
+  document.getElementById('onb-2').innerHTML = '<h2>' + onbData2.sub + '</h2>' + onbData2.body;
+
+  document.getElementById('onb-1').style.display = 'block';
+  document.getElementById('onb-2').style.display = 'none';
+  document.getElementById('onb-next').textContent = 'Дальше';
   showScreen('onboarding');
   updateOnbDots();
 }
 
 document.getElementById('onb-next').addEventListener('click', () => {
-  if (onbSlide < 4) {
-    document.getElementById('onb-' + onbSlide).style.display = 'none';
-    onbSlide++;
-    document.getElementById('onb-' + onbSlide).style.display = 'block';
+  if (onbSlide < 2) {
+    document.getElementById('onb-1').style.display = 'none';
+    onbSlide = 2;
+    document.getElementById('onb-2').style.display = 'block';
     updateOnbDots();
-    if (onbSlide === 4) document.getElementById('onb-next').textContent = 'Поехали! 🚀';
+    document.getElementById('onb-next').textContent = 'Начать';
   } else {
     state.o = true;
     saveState();
@@ -714,7 +744,7 @@ function renderDashboard() {
       updateDashTimerDisplay();
     } else {
       btn.style.display = 'flex';
-      btn.textContent = 'Всё выучено! Ты философская принцесса! 👑';
+      btn.textContent = 'Всё выучено — ты готова';
       btn.onclick = null;
       timer.style.display = 'none';
     }
