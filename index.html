@@ -214,6 +214,23 @@ body {
 .rating { opacity:0; transform:translateY(12px); transition:all 0.3s ease; pointer-events:none; }
 .rating.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
 
+/* Elaboration */
+.elab-btn { background:none; border:1px dashed var(--sep); border-radius:var(--radius-sm); padding:10px 16px; font-size:13px; color:var(--text-sec); cursor:pointer; margin-top:12px; width:100%; text-align:left; transition:all 0.2s; }
+.elab-btn:active { background:var(--bg); }
+.elab-prompt { font-size:14px; color:var(--accent); font-weight:500; line-height:1.5; margin-top:8px; padding:10px 14px; background:rgba(184,151,106,0.08); border-radius:var(--radius-sm); display:none; }
+.elab-prompt.show { display:block; animation:fadeIn 0.25s ease; }
+
+/* Recall info */
+.recall-info { font-size:11px; color:var(--text-ter); text-align:center; margin-bottom:8px; padding:4px 0; }
+.recall-info strong { color:var(--text-sec); font-weight:500; }
+
+/* Bonus insight */
+.bonus-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(44,36,32,0.5); z-index:200; display:flex; align-items:center; justify-content:center; padding:24px; animation:fadeIn 0.3s ease; }
+.bonus-card { background:var(--bg-card); border-radius:var(--radius); padding:32px 24px; max-width:380px; width:100%; text-align:center; box-shadow:var(--shadow-lg); }
+.bonus-card .bonus-label { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent); margin-bottom:12px; }
+.bonus-card blockquote { font-family:var(--font-serif); font-size:22px; font-weight:500; line-height:1.4; color:var(--text); margin-bottom:16px; font-style:italic; }
+.bonus-card .bonus-author { font-size:14px; color:var(--text-sec); margin-bottom:20px; }
+
 /* === BREAK === */
 .break-wrap { text-align:center; padding:60px 24px; }
 .break-emoji { font-size:56px; margin-bottom:20px; display:block; }
@@ -331,9 +348,12 @@ body {
       <div class="card-back">
         <span class="card-type" id="card-type-back"></span>
         <div class="card-a" id="card-a"></div>
+        <button class="elab-btn" id="elab-btn" onclick="showElab(event)">Подумай: почему?</button>
+        <div class="elab-prompt" id="elab-prompt"></div>
       </div>
     </div>
   </div>
+  <div class="recall-info" id="recall-info"></div>
   <div class="rating" id="rating">
     <button class="btn btn-sm fail" onclick="rate('fail')">Не помню</button>
     <button class="btn btn-sm hard" onclick="rate('hard')">Ещё раз</button>
@@ -348,6 +368,7 @@ body {
     <h2>Перерыв!</h2>
     <div class="break-timer" id="break-timer">00:00</div>
     <p>Мозг сейчас переносит знания в долгосрочную память. Как Гегель говорил: «сова Минервы вылетает в сумерки» — мудрость приходит, когда расслабляешься.</p>
+    <div id="session-end-phrase" style="font-size:13px; color:var(--accent); font-style:italic; margin:16px 0; line-height:1.5; display:none;"></div>
     <div class="break-hint" id="break-hint" style="display:none"></div>
     <button class="btn btn-secondary" onclick="showDashboard()">На главную</button>
   </div>
@@ -912,14 +933,19 @@ function startStudyTimer() {
 function updateStudyTimer() {
   if (!studyStartTime) return;
   const elapsed = Math.floor((Date.now() - studyStartTime) / 1000);
-  const m = Math.floor(elapsed / 60);
-  const s = elapsed % 60;
-  document.getElementById('study-timer').textContent = m + ':' + String(s).padStart(2, '0');
+  const totalSec = RECOMMENDED_SESSION_MIN * 60;
+  const remaining = totalSec - elapsed;
 
   const rec = document.getElementById('study-rec');
-  if (m < RECOMMENDED_SESSION_MIN) {
-    rec.innerHTML = 'рекомендуется <strong>' + RECOMMENDED_SESSION_MIN + ' мин</strong>';
+  if (remaining > 0) {
+    const rm = Math.floor(remaining / 60);
+    const rs = remaining % 60;
+    document.getElementById('study-timer').textContent = rm + ':' + String(rs).padStart(2, '0');
+    rec.innerHTML = 'до перерыва';
   } else {
+    const overM = Math.floor(-remaining / 60);
+    const overS = (-remaining) % 60;
+    document.getElementById('study-timer').textContent = '+' + overM + ':' + String(overS).padStart(2, '0');
     rec.innerHTML = '<strong>можно сделать перерыв</strong>';
     rec.style.color = 'var(--accent)';
   }
@@ -1035,6 +1061,44 @@ function showCard() {
   document.getElementById('study-pbar').style.width = ((studyIndex + 1) / studyTotal * 100) + '%';
   
   document.getElementById('rating').classList.remove('visible');
+
+  // Recall info — show forgetting context for repeated cards
+  const recallEl = document.getElementById('recall-info');
+  const cardLevel = getLevel(currentCard.id);
+  const lastReview = getNext(currentCard.id);
+  if (cardLevel > 0 && lastReview > 0) {
+    const interval = INTERVALS[Math.max(0, cardLevel - 1)];
+    const elapsed = Date.now() - (lastReview - interval);
+    const elapsedMin = Math.round(elapsed / 60000);
+    let timeStr;
+    if (elapsedMin < 60) timeStr = elapsedMin + ' мин назад';
+    else if (elapsedMin < 1440) timeStr = Math.round(elapsedMin / 60) + ' ч назад';
+    else timeStr = Math.round(elapsedMin / 1440) + ' дн. назад';
+    // Ebbinghaus approximate: R = e^(-t/S), where S grows with level
+    const forgotPct = Math.min(95, Math.round((1 - Math.exp(-elapsed / (interval * 1.5))) * 100));
+    recallEl.innerHTML = 'Повтор · последний раз <strong>' + timeStr + '</strong> · повторение сейчас восстанавливает ~' + forgotPct + '% забытого';
+    recallEl.style.display = 'block';
+  } else {
+    recallEl.innerHTML = 'Новая карточка · первое знакомство';
+    recallEl.style.display = 'block';
+  }
+
+  // Elaboration — reset
+  document.getElementById('elab-prompt').classList.remove('show');
+  document.getElementById('elab-btn').style.display = currentCard.tp === 'link' ? 'none' : 'block';
+  // Generate elaboration question based on card type
+  const elabQuestions = {
+    skeleton: ['Почему именно такой порядок пунктов?', 'Какой пункт самый важный для экзаменатора?', 'Объясни этот план своими словами за 30 секунд.'],
+    atom: ['Почему это важно в контексте философии?', 'Как бы ты объяснила это подруге?', 'Что бы изменилось, если бы этот факт был неверным?', 'С чем из жизни это можно сравнить?']
+  };
+  const qs = elabQuestions[currentCard.tp] || elabQuestions.atom;
+  document.getElementById('elab-prompt').textContent = qs[Math.floor(Math.random() * qs.length)];
+}
+
+function showElab(e) {
+  e.stopPropagation();
+  document.getElementById('elab-prompt').classList.add('show');
+  document.getElementById('elab-btn').style.display = 'none';
 }
 
 // Haptic — vibration only (no audio)
@@ -1121,11 +1185,58 @@ function showConfetti() {
 // ===== BREAK =====
 let breakTimer = null;
 
+// ===== BONUS INSIGHTS =====
+const BONUS_INSIGHTS = [
+  { q: 'Я знаю, что ничего не знаю.', a: 'Сократ', note: 'Ирония в том, что признание незнания — первый шаг к знанию.' },
+  { q: 'Существовать — значит быть воспринимаемым.', a: 'Джордж Беркли', note: 'Если дерево падает в лесу и никто не слышит — был ли звук?' },
+  { q: 'Человек — это канат, натянутый между животным и сверхчеловеком.', a: 'Фридрих Ницше', note: 'Мы не цель, а мост. Эволюция продолжается.' },
+  { q: 'Свобода — это осознанная необходимость.', a: 'Бенедикт Спиноза (позже Гегель и Энгельс)', note: 'Ты свободна, когда понимаешь, почему делаешь то, что делаешь.' },
+  { q: 'Ад — это другие.', a: 'Жан-Поль Сартр', note: 'Не про ненависть — про то, что мы определяем себя через чужие взгляды.' },
+  { q: 'Мыслю, следовательно существую.', a: 'Рене Декарт', note: 'Единственное, что нельзя поставить под сомнение — сам акт сомнения.' },
+  { q: 'Нет ничего в разуме, чего раньше не было бы в чувствах.', a: 'Джон Локк', note: 'Мозг при рождении — чистая доска (tabula rasa). Весь опыт — через ощущения.' },
+  { q: 'Категорический императив: поступай так, чтобы максима твоей воли могла стать всеобщим законом.', a: 'Иммануил Кант', note: 'Перед каждым поступком спроси: а если бы все так делали?' }
+];
+
+const SESSION_END_PHRASES = [
+  'Нейронные связи сейчас укрепляются. Через 2 часа ты будешь помнить это лучше, чем сейчас.',
+  'Мозг продолжает работу без тебя — гиппокамп «переигрывает» только что изученное.',
+  'Каждый повтор делал связи крепче. Следующий будет ещё легче.',
+  'Забывание — не враг. Именно благодаря ему повторение работает так мощно.',
+  'Ты только что использовала метод, который учёные называют самым эффективным для экзаменов.',
+  'Самое ценное сейчас — не учить ещё, а дать мозгу переварить. Сон и отдых — часть процесса.',
+  'Аристотель: «Мы — то, что делаем регулярно». Ты только что сделала ещё один шаг.'
+];
+
+function maybeShowBonus() {
+  // ~1 in 3 sessions
+  if (Math.random() > 0.33) return;
+  const insight = BONUS_INSIGHTS[Math.floor(Math.random() * BONUS_INSIGHTS.length)];
+  const overlay = document.createElement('div');
+  overlay.className = 'bonus-overlay';
+  overlay.innerHTML = '<div class="bonus-card">' +
+    '<div class="bonus-label">Философский инсайт</div>' +
+    '<blockquote>«' + insight.q + '»</blockquote>' +
+    '<div class="bonus-author">— ' + insight.a + '</div>' +
+    '<p style="font-size:14px;color:var(--text-sec);line-height:1.5;margin-bottom:20px">' + insight.note + '</p>' +
+    '<button class="btn btn-secondary" onclick="this.closest(\'.bonus-overlay\').remove()" style="max-width:200px;margin:0 auto">Круто</button>' +
+    '</div>';
+  document.body.appendChild(overlay);
+}
+
 function showBreak() {
   clearInterval(breakTimer);
   stopStudyTimer();
   showScreen('break-screen');
   updateBreakTimer();
+
+  // Show session-end motivational phrase
+  const phraseEl = document.getElementById('session-end-phrase');
+  const phrase = SESSION_END_PHRASES[Math.floor(Math.random() * SESSION_END_PHRASES.length)];
+  phraseEl.textContent = '✦ ' + phrase;
+  phraseEl.style.display = 'block';
+
+  // Maybe show bonus philosophy insight (~33% chance)
+  maybeShowBonus();
 
   // Show timer hint for breaks > 5 min
   const hint = document.getElementById('break-hint');
