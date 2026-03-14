@@ -203,7 +203,6 @@ body {
   box-shadow:var(--shadow-lg);
   border:0.5px solid var(--sep);
   display:flex; flex-direction:column;
-  overflow:hidden;
 }
 .card-front {
   align-items:center; justify-content:center; padding:32px 24px; cursor:pointer;
@@ -1088,7 +1087,12 @@ function showCard() {
   
   const inner = document.getElementById('card-inner');
   inner.classList.remove('flipped');
-  
+  // Reset card height to default for front face
+  inner.style.minHeight = '';
+  document.querySelector('.card-container').style.minHeight = '';
+  document.querySelector('.card-front').style.minHeight = '';
+  document.querySelector('.card-back').style.minHeight = '';
+
   const typeLabels = { skeleton: 'План', atom: 'Факт', link: 'Связи' };
   const typeLbl = typeLabels[currentCard.tp] || '';
   
@@ -1256,6 +1260,7 @@ function showElab(e) {
   e.stopPropagation();
   document.getElementById('elab-prompt').classList.add('show');
   document.getElementById('elab-btn').style.display = 'none';
+  setTimeout(resizeCard, 50);
 }
 
 // Haptic — vibration only (no audio)
@@ -1274,12 +1279,27 @@ function haptic(style) {
   } catch(e) {}
 }
 
+function resizeCard() {
+  const container = document.querySelector('.card-container');
+  const inner = document.getElementById('card-inner');
+  const back = document.querySelector('.card-back');
+  const front = document.querySelector('.card-front');
+  if (!container || !inner) return;
+  const activeface = isFlipped ? back : front;
+  const h = Math.max(380, activeface.scrollHeight);
+  inner.style.minHeight = h + 'px';
+  container.style.minHeight = h + 'px';
+  front.style.minHeight = h + 'px';
+  back.style.minHeight = h + 'px';
+}
+
 function flipCard() {
   if (isFlipped) return;
   isFlipped = true;
   haptic('light');
   document.getElementById('card-inner').classList.add('flipped');
   setTimeout(() => {
+    resizeCard();
     document.getElementById('rating').classList.add('visible');
   }, 200);
 }
