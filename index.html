@@ -85,7 +85,7 @@ body {
 .btn-sm { min-height:48px; border-radius:var(--radius-sm); font-size:15px; }
 
 /* === DASHBOARD === */
-.dash-header { padding:8px 0 16px; }
+.dash-header { padding:8px 0 12px; }
 .dash-header h1 { font-family:var(--font-serif); font-size:36px; font-weight:600; letter-spacing:-0.5px; }
 .dash-header p { font-size:15px; color:var(--text-sec); margin-top:2px; }
 .progress-wrap { height:4px; background:var(--sep); border-radius:2px; margin:16px 0; overflow:hidden; }
@@ -136,7 +136,7 @@ body {
   font-size:13px; font-weight:600; color:var(--accent);
   background:rgba(184,151,106,0.12); padding:6px 12px; border-radius:20px;
 }
-.study-timer-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding:0 4px; }
+.study-timer-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding:0; }
 .study-timer { font-size:12px; color:var(--text-ter); font-variant-numeric:tabular-nums; }
 .study-rec { font-size:11px; color:var(--text-ter); }
 .study-rec strong { color:var(--accent); font-weight:600; }
@@ -150,6 +150,7 @@ body {
   perspective:1200px;
   min-height:380px;
   margin-bottom:16px;
+  overflow:visible;
 }
 .card-inner {
   position:relative;
@@ -159,6 +160,39 @@ body {
   transform-style:preserve-3d;
 }
 .card-inner.flipped { transform:rotateY(180deg); }
+/* Card entrance animation */
+.card-inner.entering {
+  animation: cardEnter 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+@keyframes cardEnter {
+  from { opacity:0; transform:translateY(12px); }
+  to { opacity:1; transform:translateY(0); }
+}
+/* Swipe visual feedback */
+.card-inner.swiping { transition:none; }
+.card-inner.swipe-exit-left {
+  animation:swipeLeft 0.25s ease-in forwards;
+}
+.card-inner.swipe-exit-right {
+  animation:swipeRight 0.25s ease-in forwards;
+}
+@keyframes swipeLeft {
+  to { opacity:0; transform:translateX(-80px) rotateY(180deg); }
+}
+@keyframes swipeRight {
+  to { opacity:0; transform:translateX(80px) rotateY(180deg); }
+}
+/* Keyboard shortcut hint */
+.kbd-hint {
+  text-align:center; font-size:11px; color:var(--text-ter); margin-top:8px;
+  opacity:0; transition:opacity 0.4s;
+}
+.kbd-hint.show { opacity:1; }
+.kbd-hint kbd {
+  display:inline-block; font-family:inherit; font-size:10px; font-weight:600;
+  background:var(--bg); border:0.5px solid var(--sep); border-radius:4px;
+  padding:2px 6px; margin:0 2px;
+}
 .card-front, .card-back {
   position:absolute; top:0; left:0; width:100%;
   min-height:380px;
@@ -217,7 +251,7 @@ body {
 /* Elaboration */
 .elab-btn { background:none; border:1px dashed var(--sep); border-radius:var(--radius-sm); padding:10px 16px; font-size:13px; color:var(--text-sec); cursor:pointer; margin-top:12px; width:100%; text-align:left; transition:all 0.2s; }
 .elab-btn:active { background:var(--bg); }
-.elab-prompt { font-size:14px; color:var(--accent); font-weight:500; line-height:1.5; margin-top:8px; padding:10px 14px; background:rgba(184,151,106,0.08); border-radius:var(--radius-sm); display:none; }
+.elab-prompt { font-size:14px; color:var(--accent); font-weight:500; line-height:1.5; margin-top:8px; padding:10px 16px; background:rgba(184,151,106,0.08); border-radius:var(--radius-sm); display:none; }
 .elab-prompt.show { display:block; animation:fadeIn 0.25s ease; }
 
 /* Recall info */
@@ -232,11 +266,13 @@ body {
 .bonus-card .bonus-author { font-size:14px; color:var(--text-sec); margin-bottom:20px; }
 
 /* === BREAK === */
-.break-wrap { text-align:center; padding:60px 24px; }
+.break-wrap { text-align:center; padding:40px 24px; }
 .break-emoji { font-size:56px; margin-bottom:20px; display:block; }
 .break-wrap h2 { font-family:var(--font-serif); font-size:30px; font-weight:600; margin-bottom:8px; }
 .break-timer { font-size:48px; font-weight:300; color:var(--accent); letter-spacing:-1px; margin:24px 0; }
 .break-wrap p { font-size:17px; color:var(--text-sec); line-height:1.5; margin-bottom:32px; }
+.session-end-phrase { font-size:13px; color:var(--accent); font-style:italic; margin:16px 0; line-height:1.5; display:none; }
+.onb-btn-wrap { padding:12px 24px 32px; }
 
 /* === GLOBAL PROGRESS BAR === */
 .global-progress {
@@ -279,6 +315,12 @@ body {
 .gp-explain-text p:last-child { margin-bottom:0; }
 .gp-explain-text strong { color:var(--text); font-weight:600; }
 
+/* === FOOTER === */
+.app-footer {
+  text-align:center; padding:32px 0 8px; font-size:11px; color:var(--text-ter);
+  letter-spacing:0.3px;
+}
+
 /* === CONFETTI === */
 .confetti-container { position:fixed; top:0; left:0; right:0; bottom:0; pointer-events:none; z-index:999; overflow:hidden; }
 .confetti-piece {
@@ -298,7 +340,7 @@ body {
   <div class="onb-slide" id="onb-1"></div>
   <div class="onb-slide" id="onb-2" style="display:none"></div>
   <div class="onb-dots"><span class="active"></span><span></span></div>
-  <div style="padding:12px 24px 32px;">
+  <div class="onb-btn-wrap">
     <button class="btn btn-accent" id="onb-next">Дальше</button>
   </div>
 </div>
@@ -321,6 +363,7 @@ body {
   <div class="ticket-list" id="ticket-list">
     <h3>Билеты</h3>
   </div>
+  <div class="app-footer">Leitner spaced repetition · v2.0</div>
 </div>
 
 <!-- STUDY -->
@@ -343,7 +386,7 @@ body {
       <div class="card-front">
         <span class="card-type" id="card-type-front"></span>
         <div class="card-q" id="card-q"></div>
-        <div class="card-hint">нажми, чтобы увидеть ответ</div>
+        <div class="card-hint">нажми, чтобы перевернуть</div>
       </div>
       <div class="card-back">
         <span class="card-type" id="card-type-back"></span>
@@ -359,6 +402,7 @@ body {
     <button class="btn btn-sm hard" onclick="rate('hard')">Ещё раз</button>
     <button class="btn btn-sm good" onclick="rate('good')">Знаю!</button>
   </div>
+  <div class="kbd-hint" id="kbd-hint"><kbd>пробел</kbd> перевернуть · <kbd>1</kbd> не помню · <kbd>2</kbd> ещё раз · <kbd>3</kbd> знаю</div>
 </div>
 
 <!-- BREAK -->
@@ -368,7 +412,7 @@ body {
     <h2>Перерыв!</h2>
     <div class="break-timer" id="break-timer">00:00</div>
     <p>Мозг сейчас переносит знания в долгосрочную память. Как Гегель говорил: «сова Минервы вылетает в сумерки» — мудрость приходит, когда расслабляешься.</p>
-    <div id="session-end-phrase" style="font-size:13px; color:var(--accent); font-style:italic; margin:16px 0; line-height:1.5; display:none;"></div>
+    <div class="session-end-phrase" id="session-end-phrase"></div>
     <div class="break-hint" id="break-hint" style="display:none"></div>
     <button class="btn btn-secondary" onclick="showDashboard()">На главную</button>
   </div>
@@ -1390,6 +1434,96 @@ function updateBreakTimer() {
   }
   document.getElementById('break-timer').textContent = formatTime(next - Date.now());
 }
+
+// ===== CARD ENTRANCE ANIMATION =====
+(function() {
+  const origShowCard = showCard;
+  showCard = function() {
+    const inner = document.getElementById('card-inner');
+    inner.classList.remove('entering', 'swipe-exit-left', 'swipe-exit-right');
+    origShowCard();
+    // Trigger reflow then add entering class
+    void inner.offsetWidth;
+    inner.classList.add('entering');
+    inner.addEventListener('animationend', function handler() {
+      inner.classList.remove('entering');
+      inner.removeEventListener('animationend', handler);
+    });
+  };
+})();
+
+// ===== KEYBOARD SHORTCUTS =====
+(function() {
+  // Show hint only on devices with a keyboard (hover capability = desktop)
+  const hasPointer = window.matchMedia('(hover: hover)').matches;
+  if (hasPointer) {
+    const hint = document.getElementById('kbd-hint');
+    if (hint) setTimeout(() => hint.classList.add('show'), 1200);
+  }
+
+  document.addEventListener('keydown', function(e) {
+    // Only active on study screen
+    if (!document.getElementById('study').classList.contains('active')) return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+    if (e.code === 'Space' || e.code === 'Enter') {
+      e.preventDefault();
+      if (!isFlipped) flipCard();
+    } else if (isFlipped) {
+      if (e.key === '1') { e.preventDefault(); rate('fail'); }
+      else if (e.key === '2') { e.preventDefault(); rate('hard'); }
+      else if (e.key === '3') { e.preventDefault(); rate('good'); }
+    }
+  });
+})();
+
+// ===== SWIPE GESTURES =====
+(function() {
+  const container = document.querySelector('.card-container');
+  if (!container) return;
+
+  let startX = 0, startY = 0, dx = 0, tracking = false;
+  const THRESHOLD = 60;
+
+  container.addEventListener('touchstart', function(e) {
+    if (!isFlipped) return;
+    const t = e.touches[0];
+    startX = t.clientX;
+    startY = t.clientY;
+    dx = 0;
+    tracking = true;
+  }, { passive: true });
+
+  container.addEventListener('touchmove', function(e) {
+    if (!tracking || !isFlipped) return;
+    const t = e.touches[0];
+    const dy = Math.abs(t.clientY - startY);
+    dx = t.clientX - startX;
+    // If scrolling vertically, abort swipe
+    if (dy > Math.abs(dx) && dy > 10) { tracking = false; return; }
+    if (Math.abs(dx) > 10) {
+      const inner = document.getElementById('card-inner');
+      inner.classList.add('swiping');
+      inner.style.transform = 'rotateY(180deg) translateX(' + (dx * 0.4) + 'px)';
+    }
+  }, { passive: true });
+
+  container.addEventListener('touchend', function() {
+    if (!tracking || !isFlipped) { tracking = false; return; }
+    tracking = false;
+    const inner = document.getElementById('card-inner');
+    inner.classList.remove('swiping');
+    inner.style.transform = '';
+
+    if (dx < -THRESHOLD) {
+      inner.classList.add('swipe-exit-left');
+      setTimeout(() => rate('fail'), 200);
+    } else if (dx > THRESHOLD) {
+      inner.classList.add('swipe-exit-right');
+      setTimeout(() => rate('good'), 200);
+    }
+  }, { passive: true });
+})();
 
 // ===== INIT =====
 initOnboarding();
