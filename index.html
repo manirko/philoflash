@@ -6,7 +6,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Принцессософия">
-<meta name="theme-color" content="#FAF7F2">
+<meta name="theme-color" content="#FAF7F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -24,11 +27,39 @@
   --green: #8FA688;
   --red: #C4888B;
   --orange: #D4A76A;
+  --btn-text: #fff;
+  --overlay: rgba(44,36,32,0.5);
   --shadow: 0 1px 4px rgba(44,36,32,0.06);
   --shadow-lg: 0 4px 16px rgba(44,36,32,0.07);
   --radius: 16px;
   --radius-sm: 12px;
   --font-serif: 'Cormorant Garamond', 'Georgia', serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1C1917;
+    --bg-card: #272220;
+    --text: #E8E0D8;
+    --text-sec: rgba(232,224,216,0.6);
+    --text-ter: rgba(232,224,216,0.3);
+    --sep: rgba(232,224,216,0.10);
+    --accent: #C9A96E;
+    --green: #9DB896;
+    --red: #D49598;
+    --orange: #DEB87A;
+    --btn-text: #1C1917;
+    --overlay: rgba(0,0,0,0.6);
+    --shadow: 0 1px 4px rgba(0,0,0,0.2);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.25);
+  }
+  html { color-scheme: dark; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 html { background: var(--bg); }
 body {
@@ -49,7 +80,7 @@ body {
 
 /* === ONBOARDING === */
 .onb-slide { text-align:center; padding:40px 24px 20px; }
-.onb-slide h1 { font-family:var(--font-serif); font-size:38px; font-weight:600; margin-bottom:8px; letter-spacing:-0.5px; }
+.onb-slide h1 { font-family:var(--font-serif); font-size:clamp(32px, 8vw, 42px); font-weight:600; margin-bottom:8px; letter-spacing:-0.5px; }
 .onb-slide h2 { font-family:var(--font-serif); font-size:24px; font-weight:500; margin-bottom:16px; }
 .onb-slide p { font-size:17px; line-height:1.6; color:var(--text-sec); margin-bottom:12px; }
 .onb-slide .highlight { color:var(--text); font-weight:500; }
@@ -80,13 +111,13 @@ body {
   transition: opacity 0.15s, transform 0.1s;
 }
 .btn:active { opacity:0.8; transform:scale(0.98); }
-.btn-accent { background:var(--accent); color:#fff; letter-spacing:0.3px; }
+.btn-accent { background:var(--accent); color:var(--btn-text); letter-spacing:0.3px; }
 .btn-secondary { background:var(--bg-card); color:var(--accent); box-shadow:var(--shadow); }
 .btn-sm { min-height:48px; border-radius:var(--radius-sm); font-size:15px; }
 
 /* === DASHBOARD === */
 .dash-header { padding:8px 0 12px; }
-.dash-header h1 { font-family:var(--font-serif); font-size:36px; font-weight:600; letter-spacing:-0.5px; }
+.dash-header h1 { font-family:var(--font-serif); font-size:clamp(30px, 7vw, 40px); font-weight:600; letter-spacing:-0.5px; }
 .dash-header p { font-size:15px; color:var(--text-sec); margin-top:2px; }
 .progress-wrap { height:4px; background:var(--sep); border-radius:2px; margin:16px 0; overflow:hidden; }
 .progress-bar { height:100%; background:linear-gradient(90deg, var(--accent), var(--green)); border-radius:2px; transition:width 0.5s ease; }
@@ -102,13 +133,13 @@ body {
   transition: background 0.15s;
 }
 .t-row:last-child { border:none; }
-.t-row:active { background:rgba(0,0,0,0.04); }
+.t-row:active { background:var(--sep); }
 .t-num {
   width:32px; height:32px; border-radius:50%;
   background:var(--bg); display:flex; align-items:center; justify-content:center;
   font-size:13px; font-weight:700; flex-shrink:0;
 }
-.t-num.done { background:var(--green); color:#fff; }
+.t-num.done { background:var(--green); color:var(--btn-text); }
 .t-name { flex:1; font-size:15px; font-weight:400; }
 .t-dots { display:flex; gap:3px; flex-shrink:0; }
 .t-dot { width:6px; height:6px; border-radius:50%; background:var(--sep); }
@@ -216,21 +247,21 @@ body {
 .card-back.stripe-atom { border-left:3px solid var(--green); }
 .card-back.stripe-link { border-left:3px solid var(--orange); }
 .card-q {
-  font-family:var(--font-serif); font-size:24px; font-weight:600; line-height:1.4;
+  font-family:var(--font-serif); font-size:clamp(20px, 5vw, 26px); font-weight:600; line-height:1.4;
   text-align:center; color:var(--text);
 }
 .card-hint {
   font-size:13px; color:var(--text-ter); margin-top:16px;
 }
 .card-a {
-  font-size:17px; font-weight:400; line-height:1.65; color:var(--text);
+  font-size:clamp(15px, 3.8vw, 18px); font-weight:400; line-height:1.65; color:var(--text);
 }
 .card-a b, .card-a strong { font-weight:700; }
 
 /* Rating buttons */
 .rating { display:flex; gap:10px; }
 .rating .btn {
-  flex:1; min-height:52px; font-size:15px; font-weight:600; color:#fff; border-radius:var(--radius-sm);
+  flex:1; min-height:52px; font-size:15px; font-weight:600; color:var(--btn-text); border-radius:var(--radius-sm);
 }
 .rating .btn.fail { background:var(--red); }
 .rating .btn.good { background:var(--green); }
@@ -248,7 +279,7 @@ body {
 .recall-info strong { color:var(--text-sec); font-weight:500; }
 
 /* Bonus insight */
-.bonus-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(44,36,32,0.5); z-index:200; display:flex; align-items:center; justify-content:center; padding:24px; animation:fadeIn 0.3s ease; }
+.bonus-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:var(--overlay); z-index:200; display:flex; align-items:center; justify-content:center; padding:24px; animation:fadeIn 0.3s ease; }
 .bonus-card { background:var(--bg-card); border-radius:var(--radius); padding:32px 24px; max-width:380px; width:100%; text-align:center; box-shadow:var(--shadow-lg); }
 .bonus-card .bonus-label { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent); margin-bottom:12px; }
 .bonus-card blockquote { font-family:var(--font-serif); font-size:22px; font-weight:500; line-height:1.4; color:var(--text); margin-bottom:16px; font-style:italic; }
@@ -265,7 +296,9 @@ body {
 /* === GLOBAL PROGRESS BAR === */
 .global-progress {
   position:fixed; bottom:0; left:0; right:0;
-  background:var(--bg-card);
+  background:color-mix(in srgb, var(--bg-card) 80%, transparent);
+  -webkit-backdrop-filter:saturate(180%) blur(16px);
+  backdrop-filter:saturate(180%) blur(16px);
   border-top:0.5px solid var(--sep);
   padding:8px 16px max(8px, env(safe-area-inset-bottom));
   z-index:100;
@@ -687,10 +720,10 @@ function updateGlobalProgress() {
   if (!state.o) { gp.style.display = 'none'; return; }
   gp.style.display = 'block';
   const done = countDoneTickets();
-  const pct = Math.round(done / 32 * 100);
-  document.getElementById('gp-label').textContent = done + ' / 32 готово к экзамену';
-  document.getElementById('gp-bar').style.width = getMasteryPercent() + '%';
-  document.getElementById('gp-pct').textContent = pct + '%';
+  const mastery = getMasteryPercent();
+  document.getElementById('gp-label').textContent = done + ' / 32';
+  document.getElementById('gp-bar').style.width = mastery + '%';
+  document.getElementById('gp-pct').textContent = mastery + '%';
 }
 
 function toggleGpExplain() {
@@ -718,8 +751,15 @@ function formatTime(ms) {
 
 // ===== SCREENS =====
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  const update = () => {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  };
+  if (document.startViewTransition) {
+    document.startViewTransition(update);
+  } else {
+    update();
+  }
 }
 
 // ===== ONBOARDING =====
@@ -1479,7 +1519,7 @@ function updateBreakTimer() {
   const container = document.querySelector('.card-container');
   if (!container) return;
 
-  let startX = 0, startY = 0, dx = 0, tracking = false;
+  let startX = 0, startY = 0, dx = 0, tracking = false, crossedThreshold = false;
   const THRESHOLD = 60;
 
   container.addEventListener('touchstart', function(e) {
@@ -1489,6 +1529,7 @@ function updateBreakTimer() {
     startY = t.clientY;
     dx = 0;
     tracking = true;
+    crossedThreshold = false;
   }, { passive: true });
 
   container.addEventListener('touchmove', function(e) {
@@ -1501,7 +1542,13 @@ function updateBreakTimer() {
     if (Math.abs(dx) > 10) {
       const inner = document.getElementById('card-inner');
       inner.classList.add('swiping');
-      inner.style.transform = 'rotateY(180deg) translateX(' + (dx * 0.4) + 'px)';
+      // Negate dx because card is rotated 180°, so X axis is mirrored
+      inner.style.transform = 'rotateY(180deg) translateX(' + (-dx * 0.4) + 'px)';
+      // Haptic click when crossing threshold
+      if (!crossedThreshold && Math.abs(dx) >= THRESHOLD) {
+        crossedThreshold = true;
+        haptic('light');
+      }
     }
   }, { passive: true });
 
@@ -1512,12 +1559,12 @@ function updateBreakTimer() {
     inner.classList.remove('swiping');
     inner.style.transform = '';
 
-    if (dx < -THRESHOLD) {
-      inner.classList.add('swipe-exit-left');
-      setTimeout(() => rate('fail'), 200);
-    } else if (dx > THRESHOLD) {
+    if (dx > THRESHOLD) {
       inner.classList.add('swipe-exit-right');
       setTimeout(() => rate('good'), 200);
+    } else if (dx < -THRESHOLD) {
+      inner.classList.add('swipe-exit-left');
+      setTimeout(() => rate('fail'), 200);
     }
   }, { passive: true });
 })();
